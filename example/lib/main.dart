@@ -1,3 +1,4 @@
+// ignore_for_file: avoid_redundant_argument_values
 import 'dart:developer' show log;
 
 import 'package:dio/dio.dart';
@@ -8,7 +9,7 @@ void main() {
   final dio = Dio();
 
   dio.interceptors.add(
-    OmegaDioLogger(
+    const OmegaDioLogger(
       logPrint: log,
       convertFormData: true,
       showError: true,

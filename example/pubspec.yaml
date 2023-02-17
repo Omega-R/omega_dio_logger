@@ -11,3 +11,6 @@ dependencies:
   omega_dio_logger:
     path:
       ../
+
+dev_dependencies:
+  carapacik_lints: ^1.3.1
