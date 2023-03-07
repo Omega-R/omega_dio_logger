@@ -183,9 +183,9 @@ class OmegaDioLogger extends Interceptor {
       final mapJson = _encoder.convert(data);
       _printBoxed('Request Body', mapJson);
     } else if (data is FormData) {
-      final formDataMap = <String, dynamic>{}
+      final formDataMap = <String, String?>{}
         ..addEntries(data.fields)
-        ..addEntries(data.files);
+        ..addEntries(data.files.map((e) => MapEntry(e.key, e.value.filename)));
       final formDataJson = _encoder.convert(formDataMap);
       _printBoxed('FormData', formDataJson);
     } else {

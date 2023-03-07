@@ -5,12 +5,10 @@ environment:
   sdk: '>=2.19.0 <4.0.0'
 
 dependencies:
-  dio: ^5.0.0
+  dio: ^5.0.1
   flutter:
     sdk: flutter
-  omega_dio_logger:
-    path:
-      ../
+  omega_dio_logger: ^1.0.2
 
 dev_dependencies:
   carapacik_lints: ^1.3.1
