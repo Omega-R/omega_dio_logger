@@ -1,4 +1,3 @@
-// ignore_for_file: avoid_annotating_with_dynamic
 import 'dart:convert' show JsonEncoder;
 import 'dart:developer' show log;
 
@@ -214,13 +213,13 @@ class OmegaDioLogger extends Interceptor {
   void _cURLRepresentation(RequestOptions options) {
     final components = ['curl -i', '-X ${options.method}'];
 
-    options.headers.forEach((k, dynamic v) {
+    options.headers.forEach((k, v) {
       if (k != 'Cookie') {
         components.add('-H "$k: $v"');
       }
     });
 
-    final dynamic data = options.data;
+    final data = options.data;
     if (data != null) {
       if (data is FormData) {
         if (convertFormData) {
@@ -233,8 +232,7 @@ class OmegaDioLogger extends Interceptor {
         }
       } else if (options.headers['content-type'] ==
           'application/x-www-form-urlencoded') {
-        (data as Map)
-            .forEach((dynamic k, dynamic v) => components.add('-d "$k=$v"'));
+        (data as Map).forEach((k, v) => components.add('-d "$k=$v"'));
       } else {
         final dataJson = _encoder.convert(data).replaceAll('"', r'\"');
         components.add('-d "$dataJson"');
