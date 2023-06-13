@@ -17,12 +17,12 @@ jobs:
           - stable
     steps:
       - uses: actions/checkout@v3.5.3
-      - uses: dart-lang/setup-dart@v1.5.0
+      - uses: subosito/flutter-action@v2.10.0
         with:
           sdk: "${{ matrix.sdk }}"
       - name: Install dependencies
-        run: dart pub get
+        run: flutter pub get
       - name: Format
-        run: dart format --set-exit-if-changed -o none .
+        run: flutter format --set-exit-if-changed -o none .
       - name: Analyze
-        run: dart analyze lib
+        run: flutter analyze lib
