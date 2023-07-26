@@ -2,4 +2,4 @@
 /// [omega_dio_logger](https://pub.dev/packages/omega_dio_logger)
 library omega_dio_logger;
 
-export 'src/logger.dart';
+export 'src/log.dart';

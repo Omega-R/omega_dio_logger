@@ -15,20 +15,20 @@ final dio = Dio();
 
 dio.interceptors.add(const OmegaDioLogger());
 
-// or customize
+// or customize interceptor
 dio.interceptors.add(
   const OmegaDioLogger(
-    logPrint: log,
+    error: true,
+    request: true,
+    requestHeader: true,
+    requestQueryParameters: true,
+    requestBody: true,
+    response: true,
+    responseHeader: true,
+    responseBody: true,
     convertFormData: true,
-    showError: true,
-    showRequest: true,
-    showRequestBody: true,
-    showRequestHeaders: true,
-    showRequestQueryParameters: true,
-    showResponse: true,
-    showResponseBody: true,
-    showResponseHeaders: true,
     showCurl: true,
+    logPrint: print,
     showLog: kDebugMode,
   ),
 );

@@ -1,56 +1,60 @@
 import 'dart:convert' show JsonEncoder;
-import 'dart:developer' show log;
 
 import 'package:dio/dio.dart';
 
-/// Dio interceptor that logs network calls in a pretty, easy to read format with curl command
+/// Dio interceptor that logs network calls in a pretty,
+/// easy to read format with curl command
 class OmegaDioLogger extends Interceptor {
   /// Constructor for interceptor
   const OmegaDioLogger({
-    this.logPrint = log,
+    this.request = true,
+    this.requestHeader = true,
+    this.requestQueryParameters = true,
+    this.requestBody = true,
+    this.response = true,
+    this.responseHeader = true,
+    this.responseBody = true,
+    this.error = true,
     this.convertFormData = true,
-    this.showError = true,
-    this.showRequest = true,
-    this.showRequestBody = true,
-    this.showRequestHeaders = true,
-    this.showRequestQueryParameters = true,
-    this.showResponse = true,
-    this.showResponseBody = true,
-    this.showResponseHeaders = true,
+    this.colorized = true,
     this.showCurl = true,
-    this.showLog = false,
+    this.showLog = true,
+    this.logPrint = print,
   });
 
   /// Defines selected method of printing outputs
   /// defaults to log to console
   final void Function(String message) logPrint;
 
+  /// Print request [Options]
+  final bool request;
+
+  /// Print request header [Options.headers]
+  final bool requestHeader;
+
+  /// Print request body
+  final bool requestBody;
+
+  /// Print [Response]
+  final bool response;
+
+  /// Print [Response.data]
+  final bool responseBody;
+
+  /// Print [Response.headers]
+  final bool responseHeader;
+
+  /// Print error message
+  final bool error;
+
   /// Print FormData
   final bool convertFormData;
 
-  /// Print error message
-  final bool showError;
-
-  /// Print request
-  final bool showRequest;
-
-  /// Print Request body
-  final bool showRequestBody;
-
-  /// Print Request headers
-  final bool showRequestHeaders;
-
   /// Print Request Query parameters
-  final bool showRequestQueryParameters;
+  final bool requestQueryParameters;
 
-  /// Print [Response]
-  final bool showResponse;
-
-  /// Print [Response.data]
-  final bool showResponseBody;
-
-  /// Print [Response.headers]
-  final bool showResponseHeaders;
+  /// Print with colors using ASCII escape codes
+  final bool colorized;
 
   /// Print cURL
   final bool showCurl;
@@ -67,10 +71,10 @@ class OmegaDioLogger extends Interceptor {
       try {
         _logOnError(err);
       } on Object catch (e) {
-        logPrint('OmegaDioLogger $e');
+        logPrint('OmegaDioLogger: $e');
       }
     }
-    super.onError(err, handler);
+    handler.next(err);
   }
 
   @override
@@ -79,10 +83,10 @@ class OmegaDioLogger extends Interceptor {
       try {
         _logOnRequest(options);
       } on Object catch (e) {
-        logPrint('OmegaDioLogger $e');
+        logPrint('OmegaDioLogger: $e');
       }
     }
-    super.onRequest(options, handler);
+    handler.next(options);
   }
 
   @override
@@ -94,14 +98,14 @@ class OmegaDioLogger extends Interceptor {
       try {
         _logOnResponse(response);
       } on Object catch (e) {
-        logPrint('OmegaDioLogger $e');
+        logPrint('OmegaDioLogger: $e');
       }
     }
-    super.onResponse(response, handler);
+    handler.next(response);
   }
 
   void _logOnError(DioError err) {
-    if (!showError) {
+    if (!error) {
       return;
     }
     _errorRepresentation(err);
@@ -111,45 +115,54 @@ class OmegaDioLogger extends Interceptor {
     if (showCurl) {
       _cURLRepresentation(options);
     }
-    if (showRequest) {
+    if (request) {
       _requestRepresentation(options);
     }
-    if (showRequestHeaders) {
+    if (requestHeader) {
       _requestHeadersRepresentation(options);
     }
-    if (showRequestQueryParameters && options.queryParameters.isNotEmpty) {
+    if (requestQueryParameters && options.queryParameters.isNotEmpty) {
       _requestQueryParametersRepresentation(options);
     }
-    if (showRequestBody && options.method != 'GET' && options.data != null) {
+    if (requestBody && options.method != 'GET' && options.data != null) {
       _requestBodyRepresentation(options);
     }
   }
 
-  void _logOnResponse(Response<dynamic> response) {
-    if (showResponse) {
-      _responseRepresentation(response);
+  void _logOnResponse(Response<dynamic> res) {
+    if (response) {
+      _responseRepresentation(res);
     }
-    if (showResponseHeaders) {
-      _responseHeadersRepresentation(response);
+    if (responseHeader) {
+      _responseHeadersRepresentation(res);
     }
-    if (showResponseBody && response.data != null) {
-      _responseBodyRepresentation(response);
+    if (responseBody && res.data != null) {
+      _responseBodyRepresentation(res);
     }
   }
 
   void _errorRepresentation(DioError err) {
     if (err.type == DioErrorType.badResponse) {
       _printBoxed(
-        'DioError ┃ ${err.response?.statusCode} ┃ ${err.response?.statusMessage}',
+        'DioException ┃ ${err.response?.statusCode} ┃ ${err.response?.statusMessage}',
         err.response?.requestOptions.uri.toString() ?? 'Empty',
+        _ConsoleColor.red.ansi,
       );
 
       if (err.response != null && err.response!.data != null) {
         final errorResponseJson = _encoder.convert(err.response!.data);
-        _printBoxed('DioErrorBody ┃ ${err.type.name}', errorResponseJson);
+        _printBoxed(
+          'DioExceptionBody ┃ ${err.type.name}',
+          errorResponseJson,
+          _ConsoleColor.red.ansi,
+        );
       }
     } else {
-      _printBoxed('DioError ┃ ${err.type.name}', err.message ?? 'Empty');
+      _printBoxed(
+        'DioException ┃ ${err.type.name}',
+        err.message ?? 'Empty',
+        _ConsoleColor.red.ansi,
+      );
     }
   }
 
@@ -195,19 +208,31 @@ class OmegaDioLogger extends Interceptor {
   void _responseRepresentation(Response<dynamic> response) {
     final method = response.requestOptions.method;
     final uri = response.requestOptions.uri;
-    _printBoxed('Response ┃ $method ┃ ${response.statusCode}', uri.toString());
+    _printBoxed(
+      'Response ┃ $method ┃ ${response.statusCode}',
+      uri.toString(),
+      _ConsoleColor.green.ansi,
+    );
   }
 
   void _responseHeadersRepresentation(Response<dynamic> response) {
     final responseHeaders = <String, String>{};
     response.headers.forEach((k, v) => responseHeaders[k] = v.toString());
     final responseHeadersJson = _encoder.convert(responseHeaders);
-    _printBoxed('Response Headers', responseHeadersJson);
+    _printBoxed(
+      'Response Headers',
+      responseHeadersJson,
+      _ConsoleColor.green.ansi,
+    );
   }
 
   void _responseBodyRepresentation(Response<dynamic> response) {
     final bodyJson = _encoder.convert(response.data);
-    _printBoxed('Response Body', bodyJson);
+    _printBoxed(
+      'Response Body',
+      bodyJson,
+      _ConsoleColor.green.ansi,
+    );
   }
 
   void _cURLRepresentation(RequestOptions options) {
@@ -240,14 +265,51 @@ class OmegaDioLogger extends Interceptor {
     }
 
     components.add('"${options.uri}"');
-    _printBoxed('cURL', components.join(' \\\n\t'));
+    _printBoxed(
+      'cURL',
+      components.join(' \\\n\t'),
+      _ConsoleColor.blue.ansi,
+    );
   }
 
-  void _printBoxed(String header, String text) {
-    logPrint('''
+  void _printBoxed(
+    String header,
+    String text, [
+    String? color,
+  ]) {
+    var message = '''
 
 ┏━━━━━┫ $header ┣━━━━━
 $text
-┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━''');
+┗━━━━━━━━━━━━━━━━━━━━━''';
+    if (colorized && color != null) {
+      message = _colorizeMessage(message, color);
+    }
+    logPrint(message);
+  }
+
+  String _colorizeMessage(String message, String color) =>
+      '\x1B[$color$message\x1B[0m';
+}
+
+/// Available console colors
+enum _ConsoleColor {
+  red,
+  green,
+  blue,
+}
+
+/// Extesion for colors
+extension _ConsoleColorX on _ConsoleColor {
+  /// Ansi colors for terminal
+  String get ansi {
+    switch (this) {
+      case _ConsoleColor.red:
+        return '31m';
+      case _ConsoleColor.green:
+        return '33m';
+      case _ConsoleColor.blue:
+        return '34m';
+    }
   }
 }
