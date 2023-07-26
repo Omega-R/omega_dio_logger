@@ -307,7 +307,7 @@ extension _ConsoleColorX on _ConsoleColor {
       case _ConsoleColor.red:
         return '31m';
       case _ConsoleColor.green:
-        return '33m';
+        return '32m';
       case _ConsoleColor.blue:
         return '34m';
     }

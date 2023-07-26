@@ -1,3 +1,7 @@
+## 1.1.1
+
+- Use green color for requests
+
 ## 1.1.0
 
 - Add color to messages
