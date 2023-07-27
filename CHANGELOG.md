@@ -1,3 +1,7 @@
+## 1.2.0
+
+- Replace `DioError` with `DioException`
+
 ## 1.1.1
 
 - Use green color for requests

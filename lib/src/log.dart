@@ -66,7 +66,7 @@ class OmegaDioLogger extends Interceptor {
   static const _encoder = JsonEncoder.withIndent('\t');
 
   @override
-  void onError(DioError err, ErrorInterceptorHandler handler) {
+  void onError(DioException err, ErrorInterceptorHandler handler) {
     if (showLog) {
       try {
         _logOnError(err);
@@ -104,7 +104,7 @@ class OmegaDioLogger extends Interceptor {
     handler.next(response);
   }
 
-  void _logOnError(DioError err) {
+  void _logOnError(DioException err) {
     if (!error) {
       return;
     }
@@ -141,8 +141,8 @@ class OmegaDioLogger extends Interceptor {
     }
   }
 
-  void _errorRepresentation(DioError err) {
-    if (err.type == DioErrorType.badResponse) {
+  void _errorRepresentation(DioException err) {
+    if (err.type == DioExceptionType.badResponse) {
       _printBoxed(
         'DioException ┃ ${err.response?.statusCode} ┃ ${err.response?.statusMessage}',
         err.response?.requestOptions.uri.toString() ?? 'Empty',

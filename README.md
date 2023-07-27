@@ -27,6 +27,7 @@ dio.interceptors.add(
     responseHeader: true,
     responseBody: true,
     convertFormData: true,
+    colorized: true,
     showCurl: true,
     logPrint: print,
     showLog: kDebugMode,

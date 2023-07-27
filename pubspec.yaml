@@ -1,13 +1,13 @@
 name: omega_dio_logger
 description: Dio interceptor that logs network calls in a pretty, easy to read format with curl command
-version: 1.1.1
+version: 1.2.0
 repository: https://github.com/Omega-R/omega_dio_logger
 homepage: https://omega-r.com
 environment:
-  sdk: '>=2.15.0 <4.0.0'
+  sdk: '>=2.17.0 <4.0.0'
 
 dependencies:
-  dio: ^5.0.0
+  dio: '>=5.2.0 <7.0.0'
 
 dev_dependencies:
   carapacik_lints: ^1.4.2
