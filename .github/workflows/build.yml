@@ -16,7 +16,7 @@ jobs:
         sdk:
           - stable
     steps:
-      - uses: actions/checkout@v4.1.1
+      - uses: actions/checkout@v4.1.4
       - uses: subosito/flutter-action@v2.12.0
         with:
           sdk: "${{ matrix.sdk }}"
