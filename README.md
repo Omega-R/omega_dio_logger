@@ -1,4 +1,5 @@
 # Omega Dio logger
+[![dart style](https://img.shields.io/badge/style-carapacik__lints%20-brightgreen?logo=dart)](https://pub.dev/packages/carapacik_lints)
 [![pub version](https://img.shields.io/pub/v/omega_dio_logger?logo=dart)](https://pub.dev/packages/omega_dio_logger)
 [![pub likes](https://img.shields.io/pub/likes/omega_dio_logger?logo=dart)](https://pub.dev/packages/omega_dio_logger)
 
