@@ -1,3 +1,7 @@
+## 1.2.1
+
+- Use [carapacik_dio_logger](https://pub.dev/packages/carapacik_dio_logger) instead this package
+
 ## 1.2.0
 
 - Replace `DioError` with `DioException`

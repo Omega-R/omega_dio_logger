@@ -2,4 +2,6 @@
 /// [omega_dio_logger](https://pub.dev/packages/omega_dio_logger)
 library omega_dio_logger;
 
-export 'src/log.dart';
+import 'package:carapacik_dio_logger/carapacik_dio_logger.dart';
+
+typedef OmegaDioLogger = CarapacikDioLogger;

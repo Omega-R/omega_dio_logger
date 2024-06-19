@@ -1,9 +1,10 @@
-# Omega Dio logger
 [![dart style](https://img.shields.io/badge/style-carapacik__lints%20-brightgreen?logo=dart)](https://pub.dev/packages/carapacik_lints)
-[![pub version](https://img.shields.io/pub/v/omega_dio_logger?logo=dart)](https://pub.dev/packages/omega_dio_logger)
-[![pub likes](https://img.shields.io/pub/likes/omega_dio_logger?logo=dart)](https://pub.dev/packages/omega_dio_logger)
+[![pub version](https://img.shields.io/pub/v/omega_dio_logger?logo=dart)](https://pub.dev/packages/carapacik_dio_logger)
+[![pub likes](https://img.shields.io/pub/likes/omega_dio_logger?logo=dart)](https://pub.dev/packages/carapacik_dio_logger)
 
-Omega Dio logger is a Dio interceptor that logs network calls in easy to read format with curl command
+## Use [carapacik_dio_logger](https://pub.dev/packages/carapacik_dio_logger) instead this package
+
+`OmegaDioLogger` is a `Dio` interceptor that logs network calls in easy to read format with curl command
 
 ## Usage
 
